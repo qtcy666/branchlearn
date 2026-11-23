@@ -1,0 +1,151 @@
+/* ---------- 首屏 ---------- */
+
+.empty {
+  max-width: 1060px;
+  margin: 2vh auto 0;
+  text-align: left;
+  animation: rise 0.5s var(--ease) both;
+}
+
+.empty-hero {
+  display: grid;
+  grid-template-columns: 1.05fr 0.95fr;
+  gap: 56px;
+  align-items: center;
+}
+
+.empty-copy {
+  min-width: 0;
+}
+
+.empty-art {
+  display: flex;
+  justify-content: center;
+  min-width: 0;
+}
+
+.hero-art {
+  width: 100%;
+  max-width: 470px;
+  height: auto;
+}
+
+.empty-title {
+  margin: 18px 0 0;
+  font-family: var(--font-serif);
+  font-size: clamp(34px, 4.6vw, 54px);
+  font-weight: 600;
+  line-height: 1.18;
+  letter-spacing: 0.01em;
+}
+
+.empty-lead {
+  max-width: 480px;
+  margin: 20px 0 0;
+  font-size: 15px;
+  line-height: 1.85;
+  color: var(--ink-2);
+}
+
+.empty .btn-lg {
+  margin-top: 30px;
+}
+
+.empty-hint {
+  margin: 13px 0 0;
+}
+
+.empty-extra {
+  margin-top: 72px;
+}
+
+.template-block {
+  margin-top: 0;
+}
+
+.feature-row {
+  margin-top: 26px;
+}
+
+/* ---------- 树的可读性微调 ---------- */
+
+.node-row {
+  gap: 6px;
+}
+
+.node-row--chapter .node-title {
+  font-size: 14px;
+}
+
+/* ---------- 小屏 ---------- */
+
+@media (max-width: 900px) {
+  .empty {
+    margin-top: 1vh;
+  }
+
+  .empty-hero {
+    grid-template-columns: 1fr;
+    gap: 26px;
+  }
+
+  .empty-copy {
+    text-align: center;
+  }
+
+  .empty-lead {
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .empty-art {
+    order: -1;
+  }
+
+  .hero-art {
+    max-width: 340px;
+  }
+
+  .empty-extra {
+    margin-top: 52px;
+  }
+
+  .template-label {
+    text-align: center;
+  }
+}
+
+@media (max-width: 640px) {
+  :root {
+    --indent: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero-art {
+    max-width: 292px;
+  }
+
+  .empty-extra {
+    margin-top: 42px;
+  }
+}
+
+/* ---------- 首屏：双按钮并排 ---------- */
+
+.empty .empty-actions {
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.empty .empty-actions .btn-lg {
+  margin-top: 0;
+}
+
+.empty .empty-hint {
+  margin-top: 14px;
+}
+

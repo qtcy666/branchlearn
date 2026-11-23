@@ -1,0 +1,166 @@
+/* ---------- 头部操作区 ---------- */
+
+.overview-head-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: none;
+  padding-top: 16px;
+}
+
+.overview-head-actions .overview-switch {
+  padding-top: 0;
+}
+
+/* ---------- 下拉菜单 ---------- */
+
+.tree-menu {
+  position: relative;
+}
+
+.menu {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 6px);
+  min-width: 168px;
+  padding: 5px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  box-shadow: var(--shadow);
+  z-index: 40;
+  animation: pop 0.16s var(--ease) both;
+}
+
+.menu-item {
+  display: block;
+  width: 100%;
+  padding: 8px 10px;
+  border: none;
+  border-radius: 6px;
+  background: none;
+  text-align: left;
+  font-size: 13px;
+  color: var(--ink-2);
+  cursor: pointer;
+}
+
+.menu-item:hover {
+  background: var(--bg-soft);
+  color: var(--ink);
+}
+
+.menu-item--danger {
+  color: var(--warn);
+}
+
+.menu-item--danger:hover {
+  background: var(--warn-soft);
+  color: var(--warn);
+}
+
+/* ---------- 树标题编辑 ---------- */
+
+.title-input {
+  width: 100%;
+  margin: 6px 0 0;
+  padding: 2px 6px;
+  border: 1px solid var(--accent);
+  border-radius: 8px;
+  background: #fff;
+  font-family: var(--font-serif);
+  font-size: clamp(30px, 4.4vw, 42px);
+  font-weight: 600;
+  line-height: 1.25;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(47, 107, 79, 0.1);
+}
+
+/* ---------- 空树引导 ---------- */
+
+.tree-empty {
+  margin: 12px 0 2px;
+  padding: 22px;
+  text-align: center;
+  border: 1px dashed var(--line-strong);
+  border-radius: 10px;
+  background: var(--bg-soft);
+}
+
+.tree-empty-title {
+  margin: 0;
+  font-size: 13.5px;
+  font-weight: 600;
+}
+
+.tree-empty-desc {
+  margin: 6px 0 14px;
+  font-size: 12.5px;
+  line-height: 1.7;
+  color: var(--muted);
+}
+
+/* ---------- 触屏专用的排序按钮 ---------- */
+
+.move-btn {
+  display: none;
+  font-size: 13px;
+  line-height: 1;
+}
+
+@media (hover: none) {
+  .move-btn {
+    display: inline-flex;
+  }
+}
+
+/* ---------- 首次引导 ---------- */
+
+.onboarding-dots {
+  display: flex;
+  gap: 5px;
+  margin-bottom: 14px;
+}
+
+.onboarding-dots span {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--line-strong);
+  transition:
+    background 0.2s var(--ease),
+    width 0.2s var(--ease);
+}
+
+.onboarding-dots span.is-active {
+  width: 18px;
+  border-radius: 3px;
+  background: var(--accent);
+}
+
+.onboarding .dialog-title {
+  font-size: 18px;
+}
+
+.onboarding .dialog-desc {
+  margin-bottom: 4px;
+}
+
+/* ---------- 小屏修正 ---------- */
+
+@media (max-width: 640px) {
+  .overview-head-actions {
+    width: 100%;
+    padding-top: 8px;
+    justify-content: space-between;
+  }
+
+  .title-input {
+    font-size: 28px;
+  }
+
+  .menu {
+    right: auto;
+    left: 0;
+  }
+}

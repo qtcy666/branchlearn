@@ -1,0 +1,1536 @@
+/* ---------- 网站初始页：浅色纸感 · 固定一屏 ---------- */
+
+.landing-main {
+  max-width: none;
+  padding: 0;
+}
+
+.landing {
+  position: relative;
+  display: flex;
+  height: 100dvh;
+  min-height: 100dvh;
+  overflow: hidden;
+  isolation: isolate;
+  background:
+    radial-gradient(860px 440px at 12% -8%, #e9f3ec 0%, rgba(233, 243, 236, 0) 64%),
+    radial-gradient(720px 400px at 94% 2%, #f2efe5 0%, rgba(242, 239, 229, 0) 62%),
+    var(--bg);
+}
+
+.landing-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.landing-glow {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(64px);
+}
+
+.landing-glow-a {
+  width: 440px;
+  height: 440px;
+  left: -130px;
+  top: -150px;
+  background: radial-gradient(circle, rgba(95, 190, 140, 0.26), transparent 68%);
+  animation: landing-drift 18s ease-in-out infinite;
+}
+
+.landing-glow-b {
+  width: 520px;
+  height: 520px;
+  right: -170px;
+  bottom: -230px;
+  background: radial-gradient(circle, rgba(198, 178, 122, 0.22), transparent 68%);
+  animation: landing-drift 24s ease-in-out infinite reverse;
+}
+
+.landing-grid {
+  position: absolute;
+  inset: -10%;
+  background-image:
+    linear-gradient(rgba(47, 107, 79, 0.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(47, 107, 79, 0.045) 1px, transparent 1px);
+  background-size: 54px 54px;
+  -webkit-mask-image: radial-gradient(62% 60% at 50% 34%, #000 0%, transparent 80%);
+  mask-image: radial-gradient(62% 60% at 50% 34%, #000 0%, transparent 80%);
+}
+
+@keyframes landing-drift {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(26px, 22px, 0) scale(1.07);
+  }
+}
+
+.landing-inner {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 1120px;
+  height: 100%;
+  margin: 0 auto;
+  padding: 0 32px 18px;
+}
+
+/* ---------- 顶栏 ---------- */
+
+.landing-nav {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 0 0;
+}
+
+.landing-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-serif);
+  font-size: 17px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  color: var(--ink);
+}
+
+.landing-mark {
+  width: 18px;
+  height: 18px;
+  border-radius: 7px;
+  background: linear-gradient(135deg, #7fc9a3, var(--accent));
+  box-shadow: 0 4px 12px -4px rgba(47, 107, 79, 0.6);
+}
+
+.landing-nav-right {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.landing-nav-tag {
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.landing-ghost {
+  padding: 9px 17px;
+  border: 1px solid var(--line-strong);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.72);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--ink-2);
+  cursor: pointer;
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+  transition:
+    border-color 0.18s var(--ease),
+    color 0.18s var(--ease),
+    box-shadow 0.18s var(--ease),
+    transform 0.18s var(--ease);
+}
+
+.landing-ghost:hover {
+  border-color: rgba(47, 107, 79, 0.4);
+  color: var(--accent-ink);
+  box-shadow: 0 8px 20px -12px rgba(27, 26, 23, 0.28);
+  transform: translateY(-1px);
+}
+
+.landing-ghost-lg {
+  padding: 12px 22px;
+  font-size: 14px;
+}
+
+/* ---------- Hero ---------- */
+
+.landing-hero {
+  display: grid;
+  flex: 1 1 auto;
+  grid-template-columns: 1.02fr 0.98fr;
+  gap: 46px;
+  align-items: center;
+  min-height: 0;
+  padding: 10px 0;
+}
+
+.landing-copy {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+.landing-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 13px;
+  border: 1px solid rgba(47, 107, 79, 0.2);
+  border-radius: 999px;
+  background: rgba(233, 241, 236, 0.8);
+  font-size: 10.5px;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.landing-badge i {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #4bbf85;
+  box-shadow: 0 0 0 3px rgba(75, 191, 133, 0.16);
+  animation: landing-pulse 2.4s ease-in-out infinite;
+}
+
+@keyframes landing-pulse {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.45;
+    transform: scale(0.78);
+  }
+}
+
+.landing-title {
+  margin: 18px 0 0;
+  font-family: var(--font-serif);
+  font-size: clamp(28px, 3.5vw, 44px);
+  font-weight: 600;
+  line-height: 1.16;
+  letter-spacing: -0.015em;
+  color: var(--ink);
+  animation: landing-rise 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.landing-gradient {
+  background: linear-gradient(96deg, var(--accent-ink) 0%, var(--accent) 45%, #63ac86 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.landing-lead {
+  max-width: 32em;
+  margin: 16px 0 0;
+  font-size: 13.5px;
+  line-height: 1.75;
+  color: var(--ink-2);
+  animation: landing-rise 0.7s 0.06s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.landing-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 24px;
+  animation: landing-rise 0.7s 0.12s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.landing-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  padding: 12px 25px;
+  border: 0;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #4f9a74 0%, var(--accent) 58%, #235940 100%);
+  font-size: 14px;
+  font-weight: 600;
+  color: #fff;
+  cursor: pointer;
+  box-shadow:
+    0 14px 30px -14px rgba(47, 107, 79, 0.75),
+    inset 0 1px 0 rgba(255, 255, 255, 0.22);
+  transition:
+    transform 0.18s var(--ease),
+    box-shadow 0.18s var(--ease);
+}
+
+.landing-cta:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    0 20px 38px -16px rgba(47, 107, 79, 0.8),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+.landing-cta span {
+  transition: transform 0.18s var(--ease);
+}
+
+.landing-cta:hover span {
+  transform: translateX(4px);
+}
+
+.landing-hint {
+  margin: 14px 0 0;
+  font-size: 11.5px;
+  color: var(--muted);
+  animation: landing-rise 0.7s 0.18s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes landing-rise {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ---------- 迷你树卡片 ---------- */
+
+.landing-art {
+  display: flex;
+  justify-content: center;
+  min-width: 0;
+}
+
+.landing-preview {
+  position: relative;
+  width: 100%;
+  max-width: 470px;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.82);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  box-shadow:
+    0 34px 74px -38px rgba(27, 26, 23, 0.4),
+    0 2px 6px rgba(27, 26, 23, 0.04),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  animation:
+    landing-rise 0.85s 0.18s cubic-bezier(0.22, 1, 0.36, 1) both,
+    landing-float 8s 1.3s ease-in-out infinite;
+}
+
+@keyframes landing-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+.landing-preview-bar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--line);
+}
+
+.landing-preview-bar span {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--line-strong);
+}
+
+.landing-preview-bar em {
+  margin-left: auto;
+  font-style: normal;
+  font-size: 10.5px;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+}
+
+.landing-tree {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+  padding: 26px 18px 30px;
+}
+
+.landing-node {
+  position: relative;
+  padding: 8px 14px;
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  background: var(--surface);
+  font-size: 12px;
+  color: var(--ink-2);
+  white-space: nowrap;
+  box-shadow: var(--shadow-xs);
+}
+
+.landing-node-root {
+  border-color: rgba(47, 107, 79, 0.32);
+  background: var(--accent-soft);
+  font-weight: 600;
+  color: var(--accent-ink);
+  box-shadow: 0 10px 22px -14px rgba(47, 107, 79, 0.75);
+}
+
+.landing-node-root::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 100%;
+  width: 1px;
+  height: 24px;
+  background: linear-gradient(var(--line-strong), rgba(214, 208, 194, 0.25));
+}
+
+.landing-row {
+  position: relative;
+  display: flex;
+  gap: 9px;
+}
+
+.landing-row::before {
+  content: '';
+  position: absolute;
+  left: 13%;
+  right: 13%;
+  top: -13px;
+  height: 1px;
+  background: var(--line-strong);
+}
+
+.landing-row .landing-node::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: -11px;
+  width: 1px;
+  height: 11px;
+  background: var(--line-strong);
+}
+
+.landing-node-done {
+  border-color: rgba(47, 107, 79, 0.3);
+  color: var(--accent-ink);
+}
+
+.landing-node-done::after {
+  content: '';
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #4bbf85;
+  box-shadow: 0 0 0 2px rgba(75, 191, 133, 0.18);
+}
+
+.landing-node-learning {
+  border-color: rgba(169, 80, 47, 0.28);
+  color: #8a4a2c;
+}
+
+.landing-node-learning::after {
+  content: '';
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #d08a5c;
+  box-shadow: 0 0 0 2px rgba(208, 138, 92, 0.16);
+}
+
+/* ---------- 三步说明 ---------- */
+
+.landing-steps {
+  display: grid;
+  flex: 0 0 auto;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin: 0;
+  padding: 0 0 4px;
+  list-style: none;
+}
+
+.landing-step {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  padding: 12px 15px;
+  border: 1px solid var(--line);
+  border-radius: 11px;
+  background: rgba(255, 255, 255, 0.66);
+  transition:
+    border-color 0.2s var(--ease),
+    background 0.2s var(--ease),
+    transform 0.2s var(--ease);
+}
+
+.landing-step:hover {
+  border-color: rgba(47, 107, 79, 0.28);
+  background: rgba(255, 255, 255, 0.9);
+  transform: translateY(-2px);
+}
+
+.landing-step-n {
+  font-family: var(--font-serif);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  color: var(--accent);
+}
+
+.landing-step-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.landing-step-desc {
+  margin-left: auto;
+  font-size: 11.5px;
+  line-height: 1.5;
+  color: var(--muted);
+  text-align: right;
+}
+
+
+/* ---------- 密度：特性标签与应用预览 ---------- */
+
+.landing-hero {
+  gap: 40px;
+  padding: 6px 0;
+}
+
+.landing-title {
+  font-size: clamp(30px, 3.8vw, 48px);
+}
+
+.landing-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin: 18px 0 0;
+  padding: 0;
+  list-style: none;
+  animation: landing-rise 0.7s 0.1s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.landing-chips li {
+  padding: 4px 10px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.6);
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.landing-preview {
+  max-width: 500px;
+  overflow: hidden;
+}
+
+.landing-app {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 158px;
+}
+
+.landing-tree {
+  gap: 22px;
+  padding: 30px 14px 32px;
+}
+
+.landing-today {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 16px 14px;
+  border-left: 1px solid var(--line);
+  background: rgba(244, 242, 236, 0.55);
+}
+
+.landing-today-title {
+  margin: 0;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.landing-today-list {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.landing-today-list li {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  grid-template-areas:
+    'dot text'
+    'dot time';
+  column-gap: 7px;
+  row-gap: 1px;
+  align-items: start;
+}
+
+.landing-dot {
+  grid-area: dot;
+  width: 6px;
+  height: 6px;
+  margin-top: 5px;
+  border: 1px solid var(--line-strong);
+  border-radius: 50%;
+  background: var(--surface);
+}
+
+.landing-dot-learning {
+  border-color: #c98f5f;
+  background: #e8b98f;
+}
+
+.landing-dot-done {
+  border-color: #4bbf85;
+  background: #4bbf85;
+}
+
+.landing-today-list span {
+  grid-area: text;
+  font-size: 11.5px;
+  line-height: 1.35;
+  color: var(--ink-2);
+}
+
+.landing-today-list em {
+  grid-area: time;
+  font-style: normal;
+  font-size: 10px;
+  color: var(--muted);
+}
+
+.landing-progress {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 16px;
+  border-top: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.6);
+}
+
+.landing-progress span {
+  font-size: 10.5px;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+}
+
+.landing-bar {
+  flex: 1;
+  height: 4px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: var(--bg-soft);
+}
+
+.landing-bar i {
+  display: block;
+  width: 38%;
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #7fc9a3, var(--accent));
+}
+
+.landing-progress strong {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--accent-ink);
+}
+
+
+/* ---------- 卡片撑满 hero，减少两侧留白 ---------- */
+
+.landing-hero {
+  align-items: stretch;
+}
+
+.landing-art {
+  align-items: stretch;
+}
+
+.landing-preview {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.landing-app {
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
+.landing-tree {
+  justify-content: center;
+  gap: 26px;
+  padding: 28px 14px;
+}
+
+.landing-tree-foot {
+  margin: 2px 0 0;
+  font-size: 10.5px;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+}
+
+.landing-node {
+  padding: 10px 17px;
+  font-size: 12.5px;
+}
+
+.landing-today-note {
+  margin: auto 0 0;
+  padding-top: 10px;
+  border-top: 1px dashed var(--line);
+  font-size: 10px;
+  color: var(--muted);
+}
+
+.landing-today-list li:nth-child(4) span {
+  color: var(--muted);
+}
+
+
+/* ---------- 比例修正：左栏更实，右卡更小 ---------- */
+
+.landing-hero {
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 44px;
+  align-items: center;
+}
+
+.landing-art {
+  align-items: center;
+}
+
+.landing-preview {
+  height: auto;
+  max-width: 430px;
+}
+
+.landing-app {
+  flex: none;
+  grid-template-columns: minmax(0, 1fr) 136px;
+}
+
+.landing-tree {
+  justify-content: center;
+  gap: 20px;
+  padding: 24px 12px;
+}
+
+.landing-node {
+  padding: 8px 13px;
+  font-size: 11.5px;
+}
+
+.landing-preview-bar {
+  padding: 9px 12px;
+}
+
+.landing-tree-foot {
+  font-size: 10px;
+}
+
+.landing-today {
+  gap: 9px;
+  padding: 14px 12px;
+}
+
+.landing-today-list {
+  gap: 8px;
+}
+
+.landing-today-list span {
+  font-size: 11px;
+}
+
+.landing-progress {
+  padding: 10px 14px;
+}
+
+.landing-points {
+  display: flex;
+  flex-direction: column;
+  gap: 11px;
+  margin: 22px 0 0;
+  padding: 0;
+  list-style: none;
+  animation: landing-rise 0.7s 0.1s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.landing-points li {
+  position: relative;
+  padding-left: 16px;
+  font-size: 12.5px;
+  line-height: 1.6;
+  color: var(--muted);
+}
+
+.landing-points li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 8px;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--accent);
+  opacity: 0.55;
+}
+
+.landing-points b {
+  margin-right: 6px;
+  font-weight: 600;
+  color: var(--ink-2);
+}
+
+
+/* ---------- 提高密度：字号与间距 ---------- */
+
+.landing-hero {
+  padding: 0;
+}
+
+.landing-title {
+  margin-top: 20px;
+  font-size: clamp(32px, 4.2vw, 54px);
+}
+
+.landing-lead {
+  max-width: 33em;
+  margin-top: 18px;
+  font-size: 14.5px;
+  line-height: 1.85;
+}
+
+.landing-points {
+  gap: 14px;
+  margin-top: 26px;
+}
+
+.landing-points li {
+  font-size: 13px;
+}
+
+.landing-actions {
+  margin-top: 30px;
+}
+
+.landing-hint {
+  margin-top: 16px;
+}
+
+.landing-steps {
+  gap: 14px;
+  padding-bottom: 2px;
+}
+
+.landing-step {
+  padding: 15px 18px;
+}
+
+.landing-step-title {
+  font-size: 13.5px;
+}
+
+.landing-step-desc {
+  font-size: 12px;
+}
+
+.landing-inner {
+  padding-bottom: 16px;
+}
+
+
+/* ---------- 底部留白与卡片尺寸微调 ---------- */
+
+.landing-inner {
+  padding-bottom: 40px;
+}
+
+.landing-preview {
+  max-width: 470px;
+}
+
+.landing-app {
+  grid-template-columns: minmax(0, 1fr) 150px;
+}
+
+.landing-tree {
+  gap: 24px;
+  padding: 28px 14px;
+}
+
+.landing-node {
+  padding: 9px 15px;
+  font-size: 12.5px;
+}
+
+.landing-today {
+  padding: 16px 13px;
+}
+
+.landing-today-list span {
+  font-size: 11.5px;
+}
+
+
+/* ---------- 内容整体居中，底部步骤条不上贴底边 ---------- */
+
+.landing-inner {
+  position: relative;
+  justify-content: center;
+}
+
+.landing-nav {
+  position: absolute;
+  top: 18px;
+  right: 32px;
+  left: 32px;
+  padding: 0;
+}
+
+.landing-hero {
+  flex: 0 0 auto;
+  padding: 42px 0 0;
+}
+
+.landing-steps {
+  margin-top: 32px;
+}
+
+
+/* ---------- 放宽画布，卡片再放大，步骤条贴紧内容 ---------- */
+
+.landing-inner {
+  max-width: 1200px;
+  padding-right: 28px;
+  padding-left: 28px;
+}
+
+.landing-nav {
+  right: 28px;
+  left: 28px;
+}
+
+.landing-hero {
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+}
+
+.landing-preview {
+  max-width: 540px;
+}
+
+.landing-app {
+  grid-template-columns: minmax(0, 1fr) 170px;
+}
+
+.landing-tree {
+  gap: 26px;
+  padding: 30px 16px;
+}
+
+.landing-node {
+  padding: 10px 16px;
+  font-size: 13px;
+}
+
+.landing-today {
+  padding: 18px 14px;
+}
+
+.landing-today-list span {
+  font-size: 12px;
+}
+
+.landing-steps {
+  margin-top: 22px;
+}
+
+.landing-step {
+  padding: 16px 18px;
+  background: rgba(255, 255, 255, 0.78);
+}
+
+.landing-step-title {
+  font-size: 14px;
+}
+
+
+
+/* ---------- 卡片与左栏等高，压缩留白 ---------- */
+
+.landing-inner {
+  padding-bottom: 24px;
+}
+
+.landing-hero {
+  align-items: stretch;
+  padding-top: 26px;
+}
+
+.landing-art {
+  align-items: stretch;
+}
+
+.landing-preview {
+  height: 100%;
+}
+
+.landing-app {
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
+.landing-tree {
+  justify-content: space-evenly;
+  gap: 24px;
+  padding: 24px 16px;
+}
+
+.landing-today {
+  justify-content: flex-start;
+}
+
+.landing-today-list {
+  gap: 13px;
+}
+
+.landing-today-note {
+  margin-top: auto;
+}
+
+.landing-steps {
+  margin-top: 18px;
+}
+
+.landing-title {
+  font-size: clamp(34px, 4.4vw, 58px);
+}
+
+.landing-lead {
+  margin-top: 20px;
+  font-size: 15px;
+}
+
+.landing-points {
+  gap: 16px;
+  margin-top: 28px;
+}
+
+.landing-points li {
+  font-size: 13.5px;
+  line-height: 1.7;
+}
+
+.landing-actions {
+  margin-top: 30px;
+}
+
+.landing-row-sm .landing-node {
+  padding: 7px 12px;
+  font-size: 11.5px;
+}
+
+.landing-row-sm::before {
+  top: -12px;
+}
+
+.landing-row-sm .landing-node::before {
+  top: -12px;
+  height: 12px;
+}
+
+
+/* ---------- 压满视口：版心变宽、内容撑满可用高度 ---------- */
+
+.landing-inner {
+  max-width: 1320px;
+  justify-content: flex-start;
+  padding: 0 24px 22px;
+}
+
+.landing-nav {
+  position: static;
+  padding: 16px 0 0;
+}
+
+.landing-hero {
+  flex: 1 1 auto;
+  min-height: 0;
+  padding: 0;
+}
+
+.landing-preview {
+  width: 100%;
+  max-width: none;
+  height: 100%;
+}
+
+.landing-steps {
+  flex: 0 0 auto;
+  margin-top: 16px;
+}
+
+.landing-title {
+  font-size: clamp(36px, 4.8vw, 64px);
+}
+
+.landing-lead {
+  margin-top: 22px;
+  font-size: 15.5px;
+}
+
+.landing-points {
+  gap: 18px;
+  margin-top: 30px;
+}
+
+.landing-points li {
+  font-size: 14px;
+}
+
+.landing-actions {
+  margin-top: 34px;
+}
+
+.landing-node {
+  padding: 11px 18px;
+  font-size: 13.5px;
+}
+
+.landing-row-sm .landing-node {
+  padding: 8px 13px;
+  font-size: 12px;
+}
+
+.landing-today-list li {
+  padding: 2px 0;
+}
+
+.landing-today-list span {
+  font-size: 12.5px;
+}
+
+
+/* ---------- 演示卡片上下各收进约 2cm（总高减约 4cm） ---------- */
+
+.landing-preview {
+  height: calc(100% - 150px);
+  min-height: 340px;
+  align-self: center;
+}
+
+@media (max-width: 900px) {
+  .landing-inner {
+    justify-content: flex-start;
+    padding: 0 20px 16px;
+  }
+
+  .landing-nav {
+    position: static;
+    padding-top: 16px;
+  }
+
+  .landing-hero {
+    padding-top: 8px;
+  }
+
+  .landing-steps {
+    margin-top: 18px;
+  }
+
+  .landing-hero {
+    grid-template-columns: 1fr;
+    gap: 22px;
+    align-content: center;
+  }
+
+  .landing-art {
+    display: none;
+  }
+
+  .landing-chips {
+    display: none;
+  }
+
+  .landing-nav-tag {
+    display: none;
+  }
+
+  .landing-step {
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .landing-step-desc {
+    display: none;
+  }
+}
+
+@media (max-height: 620px) {
+  .landing-steps {
+    display: none;
+  }
+
+  .landing-hint {
+    display: none;
+  }
+}
+
+@media (max-height: 800px) {
+  .landing-inner {
+    padding-bottom: 26px;
+  }
+
+  .landing-title {
+    margin-top: 14px;
+    font-size: clamp(28px, 3.4vw, 44px);
+  }
+
+  .landing-lead {
+    margin-top: 14px;
+    font-size: 13.5px;
+  }
+
+  .landing-points {
+    gap: 10px;
+    margin-top: 18px;
+  }
+
+  .landing-points li {
+    font-size: 12.5px;
+  }
+
+  .landing-actions {
+    margin-top: 22px;
+  }
+
+  .landing-step {
+    padding: 12px 16px;
+  }
+}
+
+@media (max-height: 680px) {
+  .landing-badge,
+  .landing-hint,
+  .landing-steps {
+    display: none;
+  }
+}
+
+
+/* ============================================================
+   清新自然绿 · 氛围增强
+   ============================================================ */
+
+/* 背景再加一层清透的薄荷绿光晕 */
+.landing {
+  background:
+    radial-gradient(900px 480px at 12% -8%, #e9f3ec 0%, rgba(233, 243, 236, 0) 64%),
+    radial-gradient(720px 420px at 94% 2%, #f2efe5 0%, rgba(242, 239, 229, 0) 62%),
+    radial-gradient(820px 560px at 50% 118%, #eef6f1 0%, rgba(238, 246, 241, 0) 68%),
+    var(--bg);
+}
+
+/* 第三处光晕：右下偏上的一抹嫩绿 */
+.landing-glow-c {
+  width: 400px;
+  height: 400px;
+  right: 22%;
+  top: -80px;
+  background: radial-gradient(circle, rgba(127, 201, 163, 0.2), transparent 70%);
+  animation: landing-drift 30s ease-in-out infinite;
+}
+
+/* ---------- 漂浮叶片 ---------- */
+
+.landing-leaf {
+  position: absolute;
+  display: block;
+  width: 22px;
+  height: 22px;
+  border-radius: 100% 0 100% 0;
+  background: linear-gradient(135deg, #8fd0ab 0%, #4f9a74 78%);
+  opacity: 0.5;
+  filter: blur(0.4px);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.25);
+  pointer-events: none;
+}
+
+.landing-leaf-1 {
+  left: 8%;
+  top: 30%;
+  width: 26px;
+  height: 26px;
+  transform: rotate(18deg);
+  animation: leaf-drift-1 16s ease-in-out infinite;
+}
+
+.landing-leaf-2 {
+  left: 16%;
+  bottom: 18%;
+  width: 18px;
+  height: 18px;
+  opacity: 0.34;
+  transform: rotate(-32deg);
+  animation: leaf-drift-2 21s ease-in-out infinite;
+}
+
+.landing-leaf-3 {
+  right: 38%;
+  top: 14%;
+  width: 20px;
+  height: 20px;
+  opacity: 0.4;
+  transform: rotate(56deg);
+  animation: leaf-drift-3 18s ease-in-out infinite;
+}
+
+.landing-leaf-4 {
+  right: 12%;
+  top: 44%;
+  width: 24px;
+  height: 24px;
+  opacity: 0.38;
+  transform: rotate(8deg);
+  animation: leaf-drift-2 24s ease-in-out infinite reverse;
+}
+
+.landing-leaf-5 {
+  left: 34%;
+  top: 58%;
+  width: 16px;
+  height: 16px;
+  opacity: 0.28;
+  transform: rotate(-14deg);
+  animation: leaf-drift-1 19s ease-in-out infinite reverse;
+}
+
+@keyframes leaf-drift-1 {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) rotate(18deg);
+  }
+  50% {
+    transform: translate3d(18px, -26px, 0) rotate(52deg);
+  }
+}
+
+@keyframes leaf-drift-2 {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) rotate(-32deg);
+  }
+  50% {
+    transform: translate3d(-20px, 22px, 0) rotate(-64deg);
+  }
+}
+
+@keyframes leaf-drift-3 {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) rotate(56deg);
+  }
+  50% {
+    transform: translate3d(14px, 18px, 0) rotate(88deg);
+  }
+}
+
+/* ---------- 漂浮种子 / 光点 ---------- */
+
+.landing-seed {
+  position: absolute;
+  display: block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 34% 30%, #b7e2c7, #6bbd92);
+  opacity: 0.5;
+  pointer-events: none;
+  box-shadow: 0 0 12px 2px rgba(107, 189, 146, 0.28);
+}
+
+.landing-seed-1 {
+  left: 24%;
+  top: 22%;
+  animation: seed-float 14s ease-in-out infinite;
+}
+
+.landing-seed-2 {
+  right: 20%;
+  bottom: 26%;
+  width: 5px;
+  height: 5px;
+  animation: seed-float 17s ease-in-out infinite reverse;
+}
+
+.landing-seed-3 {
+  left: 46%;
+  bottom: 12%;
+  animation: seed-float 20s ease-in-out 3s infinite;
+}
+
+@keyframes seed-float {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+    opacity: 0.22;
+  }
+  50% {
+    transform: translate3d(8px, -34px, 0);
+    opacity: 0.6;
+  }
+}
+
+/* ---------- 标题渐变更饱满 ---------- */
+
+.landing-gradient {
+  background: linear-gradient(96deg, #3d8f68 0%, #2f6b4f 42%, #63ac86 82%, #8fc4a4 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* ---------- 主按钮：流光扫过 ---------- */
+
+.landing-cta {
+  position: relative;
+  overflow: hidden;
+}
+
+.landing-cta::after {
+  content: '';
+  position: absolute;
+  top: -40%;
+  left: -70%;
+  width: 42%;
+  height: 180%;
+  background: linear-gradient(100deg, transparent, rgba(255, 255, 255, 0.32), transparent);
+  transform: skewX(-18deg);
+  animation: cta-shine 4.2s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes cta-shine {
+  0%,
+  55% {
+    left: -70%;
+  }
+  100% {
+    left: 130%;
+  }
+}
+
+/* ---------- 预览卡片：内圈柔光 + 悬停微动 ---------- */
+
+.landing-card-glow {
+  position: absolute;
+  inset: -1px;
+  z-index: 0;
+  border-radius: 16px;
+  background:
+    radial-gradient(340px 200px at 82% -10%, rgba(143, 209, 171, 0.16), transparent 70%),
+    radial-gradient(300px 220px at 8% 108%, rgba(127, 201, 163, 0.14), transparent 72%);
+  pointer-events: none;
+}
+
+.landing-preview {
+  transition:
+    box-shadow 0.4s var(--ease),
+    border-color 0.4s var(--ease);
+}
+
+.landing-preview:hover {
+  border-color: rgba(47, 107, 79, 0.26);
+  box-shadow:
+    0 44px 96px -42px rgba(27, 26, 23, 0.46),
+    0 0 0 4px rgba(127, 201, 163, 0.08),
+    0 2px 6px rgba(27, 26, 23, 0.04),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9);
+}
+
+/* 预览卡片内的节点轻微浮动 */
+.landing-node {
+  transition:
+    transform 0.28s var(--ease),
+    box-shadow 0.28s var(--ease),
+    border-color 0.28s var(--ease);
+}
+
+.landing-node:hover {
+  transform: translateY(-3px);
+  border-color: rgba(47, 107, 79, 0.34);
+  box-shadow: 0 12px 24px -14px rgba(47, 107, 79, 0.6);
+}
+
+.landing-node-learning:hover {
+  border-color: rgba(169, 80, 47, 0.4);
+}
+
+/* 进度条填充微光 */
+.landing-bar i {
+  background: linear-gradient(90deg, #7fc9a3, #4f9a74, #2f6b4f);
+  background-size: 200% 100%;
+  animation: bar-sheen 3.6s linear infinite;
+}
+
+@keyframes bar-sheen {
+  0% {
+    background-position: 120% 0;
+  }
+  100% {
+    background-position: -80% 0;
+  }
+}
+
+/* 三步说明：序号点缀嫩绿圆点 */
+.landing-step {
+  position: relative;
+  overflow: hidden;
+}
+
+.landing-step::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: linear-gradient(#7fc9a3, #4f9a74);
+  opacity: 0;
+  transform: translateY(40%);
+  transition:
+    opacity 0.3s var(--ease),
+    transform 0.3s var(--ease);
+}
+
+.landing-step:hover::before {
+  opacity: 1;
+  transform: translateY(0);
+}

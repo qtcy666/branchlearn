@@ -1,0 +1,11 @@
+{
+  "name": "branchlearn-fill-server",
+  "private": true,
+  "type": "commonjs",
+  "description": "树学 AI 填充后端：DeepSeek 联网 + 结构校验。零依赖，Node 18+。",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "mock": "FILL_MOCK=1 node index.js"
+  }
+}

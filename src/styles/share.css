@@ -1,0 +1,115 @@
+/* ---------- 分享视图 ---------- */
+
+.share-banner {
+  position: sticky;
+  top: 0;
+  z-index: 60;
+  padding: 9px 16px;
+  background: var(--accent-soft);
+  border-bottom: 1px solid rgba(47, 107, 79, 0.16);
+  color: var(--accent-ink);
+  font-size: 12.5px;
+  text-align: center;
+}
+
+.status-dot--static {
+  cursor: default;
+  pointer-events: none;
+}
+
+.status-dot--static:hover {
+  transform: none;
+}
+
+.read-only-tree .node-title {
+  cursor: default;
+}
+
+/* ---------- 移动端 ---------- */
+
+@media (max-width: 640px) {
+  .node-row {
+    min-height: 42px;
+  }
+
+  .node-title {
+    font-size: 14px;
+  }
+
+  .node-actions {
+    opacity: 1;
+  }
+
+  .icon-btn {
+    width: 32px;
+    height: 32px;
+  }
+
+  .status-dot {
+    width: 18px;
+    height: 18px;
+  }
+
+  .status-dot--done::after {
+    left: 5px;
+    top: 5px;
+    width: 6px;
+    height: 4px;
+  }
+
+  .twisty {
+    width: 26px;
+    height: 26px;
+  }
+
+  .tree-panel {
+    padding: 8px 8px 12px;
+  }
+
+  .tree-toolbar-actions {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+
+  .tree-toolbar-actions .btn {
+    width: 100%;
+  }
+
+  .overview-progress {
+    width: 100%;
+    max-width: none;
+  }
+
+  .overview-switch {
+    width: 100%;
+    padding-top: 6px;
+  }
+
+  .tree-select {
+    width: 100%;
+  }
+
+  .today {
+    padding: 16px;
+  }
+
+  .today-actions .btn {
+    flex: 1;
+  }
+}
+
+@media (max-width: 400px) {
+  .brand-name {
+    font-size: 14px;
+  }
+
+  .empty-title {
+    font-size: 29px;
+  }
+
+  .add-chapter {
+    padding: 11px 12px;
+  }
+}

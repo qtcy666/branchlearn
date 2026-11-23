@@ -1,0 +1,34 @@
+{
+  "name": "branchlearn",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "把模糊的学习目标拆成一棵能标状态、能告诉你今天该学什么的树",
+  "scripts": {
+    "dev": "node scripts/dev.mjs",
+    "build": "tsc -b && vite build",
+    "preview": "vite preview --port 4173 --host",
+    "typecheck": "tsc --noEmit",
+    "smoke": "esbuild scripts/smoke-check.tsx --bundle --platform=node --format=cjs --jsx=automatic --outfile=node_modules/.cache/smoke.cjs --loader:.css=empty --log-level=warning && node node_modules/.cache/smoke.cjs",
+    "bench": "esbuild scripts/bench-tree.tsx --bundle --platform=node --format=cjs --jsx=automatic --outfile=node_modules/.cache/bench.cjs --loader:.css=empty --log-level=warning && node node_modules/.cache/bench.cjs"
+  },
+  "dependencies": {
+    "@dgreenheck/ez-tree": "^1.1.0",
+    "d3-hierarchy": "^3.1.3",
+    "lz-string": "^1.5.0",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "three": "^0.187.0",
+    "zustand": "^5.0.2"
+  },
+  "devDependencies": {
+    "@types/d3-hierarchy": "^3.1.7",
+    "@types/lz-string": "^1.3.34",
+    "@types/react": "^19.1.0",
+    "@types/react-dom": "^19.1.0",
+    "@types/three": "^0.187.0",
+    "@vitejs/plugin-react": "^5.0.0",
+    "typescript": "^5.9.0",
+    "vite": "^7.0.0"
+  }
+}

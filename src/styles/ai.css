@@ -1,0 +1,132 @@
+.ai-fill {
+  width: min(520px, 92vw);
+}
+
+.ai-fill-label {
+  display: block;
+  margin: 16px 0 6px;
+  font-size: 13px;
+  color: var(--ink-2);
+}
+
+.ai-fill-input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 10px 12px;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  font: inherit;
+  font-size: 14px;
+  color: var(--ink);
+}
+
+.ai-fill-input::placeholder {
+  color: var(--muted);
+}
+
+.ai-fill-input:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-soft);
+}
+
+.ai-fill-error {
+  margin: 12px 0 0;
+  padding: 10px 12px;
+  border-radius: var(--radius-sm);
+  background: var(--warn-soft);
+  color: var(--warn);
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.ai-fill-details {
+  margin: 6px 0 0;
+  padding-left: 18px;
+  font-size: 12px;
+  line-height: 1.7;
+}
+
+.ai-fill-loading {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 26px 0 10px;
+  font-size: 14px;
+  color: var(--ink-2);
+}
+
+.ai-fill-spinner {
+  width: 18px;
+  height: 18px;
+  flex: none;
+  border: 2px solid var(--line-strong);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: ai-fill-spin 0.9s linear infinite;
+}
+
+@keyframes ai-fill-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.ai-fill-note {
+  margin: 8px 0 0;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.ai-fill-preview {
+  margin-top: 18px;
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--bg-soft);
+}
+
+.ai-fill-root {
+  margin: 0;
+  font-family: var(--font-serif);
+  font-size: 19px;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.ai-fill-meta {
+  margin: 6px 0 0;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.ai-fill-chapters {
+  list-style: none;
+  margin: 12px 0 0;
+  padding: 0;
+  display: grid;
+  gap: 6px;
+}
+
+.ai-fill-chapters li {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+  font-size: 13px;
+  color: var(--ink-2);
+}
+
+.ai-fill-chapters em {
+  flex: none;
+  font-style: normal;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+@media (max-width: 520px) {
+  .ai-fill {
+    width: 94vw;
+  }
+}

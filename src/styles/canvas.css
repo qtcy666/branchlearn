@@ -1,0 +1,689 @@
+/* ---------- 树状图画布 ---------- */
+
+.canvas-area {
+  /* 设计令牌（规范 v1）：间距只取 4/8/12/16/24/32/48/64/96 */
+  --node-pad: 12px 10px;
+  --gap-sibling: 24px;
+  --gap-cousin: 48px;
+  --gap-level: 96px;
+  --group-pad: 24px;
+  --gap-group: 48px;
+  --canvas-pad: 64px;
+  --radius-node: 8px;
+  --radius-group: 12px;
+  --bg-canvas: #f4f6f3;
+  --grid-dot: #dde3db;
+  --surface: #ffffff;
+  --ink-900: #1f2a24;
+  --ink-600: #5a6660;
+  --ink-400: #98a29b;
+  --edge: #b8c7ba;
+
+  position: relative;
+  display: flex;
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  margin-top: 12px;
+}
+
+:root {
+  /* 同父兄弟 / 跨子树 / 层间 / 章卡片：四档独立间距，禁止共用 */
+  --gap-sibling: 4px;
+  --gap-cousin: 12px;
+  --gap-level: 380px;
+  --gap-level-root: 400px;
+  --gap-level-chapter: 380px;
+  --gap-card: 24px;
+}
+
+.canvas-stage {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  overflow: auto;
+  background-color: #f1f6f2;
+  background-image:
+    radial-gradient(85% 70% at 50% -5%, rgba(47, 107, 79, 0.13), transparent 58%),
+    radial-gradient(60% 55% at 100% 100%, rgba(47, 107, 79, 0.08), transparent 60%),
+    radial-gradient(60% 55% at 0% 100%, rgba(47, 107, 79, 0.08), transparent 60%),
+    radial-gradient(circle, rgba(47, 107, 79, 0.07) 1px, transparent 1px);
+  background-size:
+    100% 100%,
+    100% 100%,
+    100% 100%,
+    16px 16px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-xs);
+  overscroll-behavior: contain;
+}
+
+.canvas-content {
+  position: relative;
+}
+
+/* 层级栏：独立于画布的页面左栏，始终在树状图之上 */
+.canvas-levels {
+  position: relative;
+  flex: 0 0 60px;
+  min-height: 0;
+  z-index: 5;
+  overflow: hidden;
+  background-color: #f1f6f2;
+  background-image: radial-gradient(circle, rgba(47, 107, 79, 0.07) 1px, transparent 1px);
+  background-size: 16px 16px;
+  border-right: 1px solid var(--line);
+}
+
+.canvas-level-slot {
+  position: absolute;
+  left: 8px;
+  transform: translateY(-50%);
+}
+
+.canvas-level {
+  padding: 3px 7px;
+  border: 1px dashed transparent;
+  border-radius: 5px;
+  background: transparent;
+  font-size: calc(12.5px * var(--canvas-scale, 1));
+  font-weight: 400;
+  letter-spacing: 0;
+  color: var(--ink);
+  white-space: nowrap;
+  cursor: text;
+  transition:
+    border-color 0.14s var(--ease),
+    color 0.14s var(--ease);
+}
+
+.canvas-level:hover {
+  border-color: var(--line-strong);
+  color: var(--ink);
+}
+
+.canvas-level-input {
+  width: 82px;
+  height: 24px;
+  padding: 0 6px;
+  border: 1px solid var(--accent);
+  border-radius: 5px;
+  background: #fff;
+  font-size: calc(12.5px * var(--canvas-scale, 1));
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(47, 107, 79, 0.1);
+}
+
+.canvas {
+  position: absolute;
+  transform-origin: 0 0;
+}
+
+.canvas-zoom {
+  position: fixed;
+  right: 18px;
+  bottom: 18px;
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: 3px;
+  background: rgba(255, 255, 255, 0.94);
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  box-shadow: var(--shadow-xs);
+}
+
+.canvas-zoom button {
+  min-width: 24px;
+  height: 24px;
+  padding: 0 6px;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--ink-2);
+  font-size: 13px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.canvas-zoom button:hover {
+  background: var(--bg-soft);
+}
+
+.canvas-zoom-value {
+  min-width: 48px !important;
+  font-size: 11px !important;
+  color: var(--muted) !important;
+  font-variant-numeric: tabular-nums;
+}
+
+.canvas-edges {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.canvas-node {
+  position: absolute;
+  box-sizing: border-box;
+  width: var(--node-w, 96px);
+  height: var(--node-h, 72px);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 5px;
+  padding: 10px 14px;
+  color: var(--node-ink, var(--ink));
+  transition:
+    border-color 0.16s var(--ease),
+    box-shadow 0.16s var(--ease),
+    opacity 0.18s var(--ease),
+    transform 0.16s var(--ease);
+}
+
+.canvas-node:hover {
+  z-index: 3;
+}
+
+.canvas-node.is-solid:hover {
+  box-shadow: 0 6px 18px rgba(29, 58, 45, 0.22);
+}
+
+.canvas-node.is-soft:hover {
+  border-color: var(--node-color);
+  box-shadow: 0 4px 12px rgba(29, 58, 45, 0.12);
+}
+
+.canvas-node.is-drop {
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.9);
+  z-index: 4;
+}
+
+/* 浅色卡片上的放置高亮：白描边会消失，改用绿色描边 */
+.canvas-node.is-soft.is-drop {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px rgba(47, 107, 79, 0.28);
+}
+
+.canvas-node.is-dragging {
+  opacity: 0.45;
+}
+
+/* ---------- 悬停聚焦 ----------
+   停在某个节点上时，只保留它自己、祖先链和整棵子树，其余分支退到背景。
+   和放射树用同一套语义，两个视图的悬停反馈保持一致。
+   ------------------------------------------------------------------ */
+
+.canvas-node.is-dim {
+  opacity: 0.24;
+}
+
+.canvas-edges path {
+  transition: opacity 0.18s var(--ease);
+}
+
+.canvas-edges path.is-dim {
+  opacity: 0.09;
+}
+
+/* 拖拽中的节点不该被悬停聚焦压暗 */
+.canvas-node.is-dim.is-dragging {
+  opacity: 0.45;
+}
+
+/* ---------- 节点材质 ----------
+   结构层（根 / 一级）：实色绿，作为整棵树的视觉锚点。
+   内容层（二级及以下）：浅色卡片，只用描边保留层级色。
+   层级感来自材质差异，而不是把每一层都涂成同等重量的实心绿。
+   ------------------------------------------------------------------ */
+
+.canvas-node {
+  border-radius: 12px;
+}
+
+/* 结构层 */
+.canvas-node.is-solid {
+  background: linear-gradient(180deg, var(--node-soft) 0%, var(--node-color) 100%);
+  border: 1px solid var(--node-color);
+  box-shadow: 0 2px 8px rgba(29, 58, 45, 0.14);
+}
+
+.canvas-node.is-solid .canvas-title {
+  color: #fff;
+  font-weight: 600;
+}
+
+.canvas-node.is-solid .canvas-title-empty {
+  color: rgba(255, 255, 255, 0.78);
+}
+
+.canvas-node.is-solid .status-dot {
+  border-color: rgba(255, 255, 255, 0.85);
+}
+
+.canvas-node.is-solid .status-dot--learning {
+  border-color: rgba(255, 255, 255, 0.85);
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.9) 50%, transparent 50%);
+}
+
+.canvas-node.is-solid .status-dot--done {
+  border-color: #fff;
+  background: #fff;
+}
+
+.canvas-node.is-solid .status-dot--done::after {
+  border-left-color: var(--node-color);
+  border-bottom-color: var(--node-color);
+}
+
+.canvas-node.is-solid .canvas-actions {
+  background: transparent;
+}
+
+.canvas-node.is-solid .canvas-action {
+  /* 实心底色：透明按钮叠在透出的标题上会产生重影，实心块才能干净地盖住文字 */
+  background: var(--node-color);
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.canvas-node.is-solid .canvas-action:hover {
+  background: rgba(255, 255, 255, 0.18);
+  color: #fff;
+}
+
+.canvas-node.is-solid .canvas-action--danger:hover {
+  background: rgba(255, 255, 255, 0.18);
+  color: #ffd9d0;
+}
+
+/* 内容层 */
+.canvas-node.is-soft {
+  background: rgba(255, 255, 255, 0.95);
+  border: 1px solid var(--node-soft-border);
+  box-shadow: 0 1px 3px rgba(29, 58, 45, 0.06);
+}
+
+.canvas-node.is-soft .canvas-title {
+  color: #2b4a3a;
+  font-weight: 600;
+}
+
+.canvas-node.is-soft .canvas-title-empty {
+  color: rgba(43, 74, 58, 0.45);
+}
+
+/* 浅色卡片上的状态点：换成与放射树一致的实色语义，避免白圆环融进白底 */
+.canvas-node.is-soft .status-dot {
+  border-color: rgba(47, 107, 79, 0.34);
+}
+
+.canvas-node.is-soft .status-dot--learning {
+  border-color: #c08a2e;
+}
+
+.canvas-node.is-soft .status-dot--done {
+  border-color: #3f7a3a;
+  background: #3f7a3a;
+}
+
+/* 浅色卡片上的折叠按钮：白描边会融进卡片，改用绿色描边撑出边界 */
+.canvas-node.is-soft .canvas-handle {
+  border-width: 1.5px;
+  border-color: rgba(47, 107, 79, 0.34);
+  color: #4d7a63;
+  box-shadow: 0 1px 3px rgba(29, 58, 45, 0.14);
+}
+
+.canvas-node.is-soft .canvas-actions {
+  background: transparent;
+}
+
+.canvas-node.is-soft .canvas-action {
+  background: rgba(255, 255, 255, 0.98);
+  color: #7a9184;
+}
+
+.canvas-node.is-soft .canvas-action:hover {
+  background: rgba(47, 107, 79, 0.1);
+  color: #2b4a3a;
+}
+
+.canvas-node.is-soft .canvas-action--danger:hover {
+  background: #f6e4de;
+  color: var(--warn);
+}
+
+.canvas-title {
+  flex: none;
+  width: 100%;
+  font-size: 13px;
+  line-height: 1.3;
+  white-space: pre-line;
+  overflow-wrap: break-word;
+  cursor: text;
+}
+
+.canvas-actions {
+  position: absolute;
+  right: 5px;
+  /* 放右上角而不是垂直居中：状态点在左上、标题在中下，右上角是唯一不会被标题占用的位置 */
+  top: 4px;
+  display: flex;
+  gap: 1px;
+  opacity: 0;
+  transition: opacity 0.14s var(--ease);
+}
+
+.canvas-node:hover .canvas-actions,
+.canvas-node:focus-within .canvas-actions {
+  opacity: 1;
+}
+
+.canvas-action {
+  width: 20px;
+  height: 22px;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 5px;
+  background: transparent;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.canvas-action:hover {
+  background: var(--line);
+  color: var(--ink);
+}
+
+.canvas-action--danger:hover {
+  background: #f6e4de;
+  color: var(--warn);
+}
+
+.canvas-handle {
+  position: absolute;
+  right: -11px;
+  top: 50%;
+  transform: translateY(-50%);
+  min-width: 20px;
+  height: 20px;
+  padding: 0 4px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(47, 107, 79, 0.26);
+  border-radius: 10px;
+  background: #fff;
+  color: #4d7a63;
+  font-size: 10px;
+  line-height: 1;
+  cursor: pointer;
+  z-index: 5;
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.92);
+}
+
+.canvas-handle:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.canvas-handle.is-collapsed {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+
+.canvas-input {
+  flex: none;
+  width: 100%;
+  height: 26px;
+  padding: 0 6px;
+  border: 1px solid var(--accent);
+  border-radius: 6px;
+  font-size: 12.5px;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(47, 107, 79, 0.1);
+}
+
+.canvas-add-first {
+  position: absolute;
+  width: 96px;
+  height: 72px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px dashed var(--line-strong);
+  border-radius: 10px;
+  background: transparent;
+  color: var(--muted);
+  font-size: 12.5px;
+  cursor: pointer;
+  transition:
+    border-color 0.16s var(--ease),
+    background 0.16s var(--ease),
+    color 0.16s var(--ease);
+}
+
+.canvas-add-first:hover {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+
+@media (hover: none) {
+  .canvas-actions {
+    opacity: 1;
+  }
+}
+
+@media (max-width: 640px) {
+  .canvas-scroll {
+    max-height: 62vh;
+    padding: 2px;
+  }
+}
+
+.canvas-zoom-sep {
+  width: 1px;
+  height: 15px;
+  margin: 0 3px;
+  background: var(--line);
+}
+
+.canvas-zoom-fit {
+  font-size: 11px !important;
+  color: var(--ink-2) !important;
+  padding: 0 8px !important;
+}
+
+
+/* 画布内状态点随节点大小等比缩放 */
+.canvas-node .status-dot {
+  width: calc(var(--node-w, 96px) * 0.14);
+  height: calc(var(--node-w, 96px) * 0.14);
+}
+
+.canvas-node .status-dot--done::after {
+  left: 27%;
+  top: 27%;
+  width: 33%;
+  height: 20%;
+}
+
+.canvas-title-empty {
+  color: var(--node-ink, rgba(47, 107, 79, 0.5));
+  font-style: normal;
+  opacity: 0.6;
+}
+
+/* 窄面板：宽度比高度稀缺，层名栏从 104px 收到 44px，层名改竖排 */
+@media (max-width: 720px) {
+  .canvas-levels {
+    flex: 0 0 44px;
+  }
+
+  .canvas-level {
+    writing-mode: vertical-rl;
+    letter-spacing: 2px;
+    font-size: 12px;
+    padding: 6px 2px;
+  }
+
+  /* 底部缩放条会盖住最后几个节点，留出滚动余量 */
+  .canvas-stage {
+    padding-bottom: 56px;
+  }
+
+  /* 编辑时不能竖排，回到横排并给足宽度 */
+  .canvas-level-input {
+    writing-mode: horizontal-tb;
+    width: 72px;
+    font-size: 12px;
+  }
+}
+
+/* =========================================================
+   视觉层级（2026 版式）：根 / 章 / 叶三级
+   间距、圆角、字号都按 depth 区分，不再靠 is-solid/is-soft 两档
+   ========================================================= */
+
+.canvas-node {
+  padding: 0 12px;
+  gap: 0;
+  align-items: center;
+  justify-content: center;
+}
+
+.canvas-title {
+  font-size: inherit;
+  line-height: 1.35;
+}
+
+.canvas-node[data-depth="0"] {
+  background: #2f6b4f;
+  border: 1px solid #2f6b4f;
+  color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 6px 16px rgba(31, 42, 36, 0.12);
+  font-size: 24px;
+  font-weight: 700;
+  padding: 0 16px;
+}
+
+.canvas-node[data-depth="0"] .canvas-title {
+  color: #ffffff;
+  font-weight: 700;
+}
+
+/* 章节点：恢复原来的白底 + 绿描边节点形式 */
+.canvas-node[data-depth="1"] {
+  background: #ffffff;
+  border: 1px solid #5c8a6b;
+  color: #2f6b4f;
+  border-radius: 10px;
+  box-shadow: none;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.15;
+  padding: 0 10px 0 32px;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.canvas-node[data-depth="1"] .canvas-title {
+  color: #2f6b4f;
+  font-weight: 600;
+  white-space: normal;
+  overflow: hidden;
+  text-overflow: clip;
+  word-break: break-word;
+  text-align: left;
+}
+
+.canvas-node[data-depth="2"] {
+  background: #ffffff;
+  border: 1px solid #d3ded6;
+  color: #2f3a33;
+  border-radius: 6px;
+  box-shadow: none;
+  font-size: 15px;
+  font-weight: 400;
+  padding: 12px 8px;
+  line-height: 1.4;
+  justify-content: center;
+}
+
+/* 叶格只有 120 宽：标题换行，不缩字号、不加省略号 */
+.canvas-node[data-depth="2"] .canvas-title {
+  color: #3a443c;
+  font-weight: 400;
+  white-space: normal;
+  overflow: visible;
+  text-overflow: clip;
+  word-break: break-word;
+  text-wrap: balance;
+  text-align: center;
+}
+
+.canvas-node[data-depth="0"] .canvas-title {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* 旧的状态圆点在三级卡片里会挤压文字，改用章右侧的进度点 */
+.canvas-node .status-dot {
+  display: none;
+}
+
+.canvas-badge {
+  position: absolute;
+  left: 12px;
+  top: 7px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: #5c8a6b;
+  font-variant-numeric: tabular-nums;
+}
+
+.canvas-progress {
+  position: absolute;
+  right: -9px;
+  top: 50%;
+  width: 6px;
+  height: 6px;
+  margin-top: -3px;
+  border-radius: 50%;
+  background: #c9d2cb;
+  cursor: pointer;
+}
+
+.canvas-progress[data-status="learning"] {
+  background: #e39a4b;
+}
+
+.canvas-progress[data-status="done"] {
+  background: #4e9a6b;
+}
+
+/* 缩得太小时点阵会变成噪点，直接关掉 */
+.canvas-area.is-zoom-low .canvas-stage,
+.canvas-area.is-zoom-low {
+  background-image: none;
+}
+
+/* 章的进度点在右端，操作按钮挪到框外右上角，悬停才出现 */
+.canvas-node[data-depth="1"] .canvas-actions {
+  right: -10px;
+  top: -12px;
+}

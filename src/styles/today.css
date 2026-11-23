@@ -1,0 +1,194 @@
+/* ---------- 节点状态圆点 ---------- */
+
+.status-dot {
+  position: relative;
+  flex: none;
+  width: 15px;
+  height: 15px;
+  padding: 0;
+  border: 1.5px solid var(--line-strong);
+  border-radius: 50%;
+  background: transparent;
+  cursor: pointer;
+  transition:
+    border-color 0.16s var(--ease),
+    background 0.16s var(--ease),
+    transform 0.12s var(--ease);
+}
+
+.status-dot:hover {
+  border-color: var(--accent);
+  transform: scale(1.12);
+}
+
+.status-dot--learning {
+  border-color: #c08a2e;
+  background: linear-gradient(90deg, #d9a441 50%, transparent 50%);
+}
+
+.status-dot--done {
+  border-color: var(--accent);
+  background: var(--accent);
+}
+
+.status-dot--done::after {
+  content: "";
+  position: absolute;
+  left: 4px;
+  top: 4px;
+  width: 5px;
+  height: 3px;
+  border-left: 1.4px solid #fff;
+  border-bottom: 1.4px solid #fff;
+  transform: rotate(-45deg);
+}
+
+/* ---------- 进度条 ---------- */
+
+.overview-progress {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+  max-width: 320px;
+  min-width: 180px;
+}
+
+.overview-progress-track {
+  flex: 1;
+  height: 5px;
+  border-radius: 999px;
+  background: var(--bg-soft);
+  overflow: hidden;
+}
+
+.overview-progress-fill {
+  height: 100%;
+  border-radius: 999px;
+  background: var(--accent);
+  transition: width 0.4s var(--ease);
+}
+
+.overview-progress-text {
+  flex: none;
+  font-size: 12px;
+  color: var(--muted);
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- 今天做什么 ---------- */
+
+.today {
+  margin-top: 22px;
+  padding: 20px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-xs);
+}
+
+.today-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.today-title {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 650;
+  letter-spacing: -0.01em;
+}
+
+.today-sub {
+  margin: 4px 0 0;
+  font-size: 12.5px;
+  color: var(--muted);
+}
+
+.today-grid {
+  margin-top: 16px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.today-card {
+  display: flex;
+  flex-direction: column;
+  padding: 14px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: #fff;
+  transition:
+    border-color 0.18s var(--ease),
+    box-shadow 0.18s var(--ease);
+}
+
+.today-card:hover {
+  border-color: var(--line-strong);
+  box-shadow: var(--shadow-xs);
+}
+
+.today-card-top {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.today-index {
+  flex: none;
+  padding: 1px 5px;
+  border-radius: 5px;
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-size: 11px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.today-path {
+  min-width: 0;
+  font-size: 11.5px;
+  color: var(--muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.today-card-title {
+  margin: 10px 0 0;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.today-reason {
+  flex: 1;
+  margin: 6px 0 0;
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--muted);
+}
+
+.today-actions {
+  margin-top: 14px;
+  display: flex;
+  gap: 6px;
+}
+
+.today-done-text {
+  margin: 12px 0 0;
+  font-size: 13px;
+  line-height: 1.7;
+  color: var(--ink-2);
+}
+
+@media (max-width: 760px) {
+  .today-grid {
+    grid-template-columns: 1fr;
+  }
+}
