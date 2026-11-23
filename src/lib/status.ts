@@ -2,21 +2,32 @@ import type { NodeStatus, TreeNode } from '../types/tree'
 
 /**
  * 状态的两层含义：
- * - 存储的 status：用户对这个节点本身标了什么
- * - 展示的 displayStatus：父节点在界面上应该显示成什么
+ * - 存储的 status：用户对这个节点本身标了什么（只有叶子节点会被写入）
+ * - 展示的 displayStatus：节点在界面上应该显示成什么
  *
- * 父节点没被子节点"手动覆盖"时，显示状态由子节点聚合推导：
+ * 规则（自 V1.1 起收紧）：
+ *   叶子节点           → 用它自己的 status
+ *   有子节点的父节点   → 一律由子节点聚合推导，不接受手动覆盖
+ *
+ * 聚合规则：
  *   全部子节点 done       → done
  *   有任意子节点非 todo   → learning
  *   其余                  → todo
- * 这样用户不需要逐个点父节点，标完小节，章节自动变绿。
+ *
+ * 也就是说：父节点只有在它下面的子节点全部完成时才会变成完成，
+ * 不能提前手动把一章标成"已掌握"。statusManual 字段只为兼容旧数据保留，
+ * 不再参与显示判断。
  */
 
 export function displayStatus(node: TreeNode): NodeStatus {
   // 叶子节点的状态就是它自己，聚合没有意义
   if (node.children.length === 0) return node.status
-  if (node.statusManual) return node.status
   return aggregateStatus(node)
+}
+
+/** 有子节点的节点，其状态只能由子节点决定。 */
+export function isDerivedStatus(node: TreeNode): boolean {
+  return node.children.length > 0
 }
 
 /** 忽略节点自身的 status / statusManual，只看子节点。 */

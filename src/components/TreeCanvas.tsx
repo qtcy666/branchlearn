@@ -7,7 +7,7 @@ import {
   type DragEvent,
 } from 'react'
 import { useTreeStore } from '../store/useTreeStore'
-import { isSolidTier } from '../lib/colors'
+import { DONE_COLORS, isSolidTier } from '../lib/colors'
 import { displayStatus } from '../lib/status'
 import { countDescendants, findNode, isDescendant } from '../lib/treeOps'
 import { DEFAULT_GAPS, PADDING, edgePath, layoutTreeVisual, type TreeGaps } from '../lib/treeLayout'
@@ -401,6 +401,9 @@ export function TreeCanvas({ tree }: Props) {
             const node = item.node
             const isRoot = item.depth === 0
             const status = displayStatus(node)
+            const isDone = status === 'done'
+            // 有子节点的节点：状态只读，由子节点汇总决定
+            const isDerived = node.children.length > 0
             const isRenaming = renamingId === node.id
             const isDropTarget = dropTargetId === node.id
 
@@ -423,10 +426,11 @@ export function TreeCanvas({ tree }: Props) {
                   top: item.y + PADDING,
                   width: item.width,
                   height: item.height,
-                  '--node-color': item.color,
-                  '--node-soft': item.soft,
-                  '--node-soft-border': item.softBorder,
-                  '--node-ink': item.ink,
+                  // 完成 = 金，未完成 = 层级绿；整块材质一起换，保证卡片和连线不打架
+                  '--node-color': isDone ? DONE_COLORS.core : item.color,
+                  '--node-soft': isDone ? DONE_COLORS.light : item.soft,
+                  '--node-soft-border': isDone ? DONE_COLORS.border : item.softBorder,
+                  '--node-ink': isDone ? DONE_COLORS.ink : item.ink,
                 } as CSSProperties}
                 draggable={!isRoot && !isRenaming}
                 onMouseEnter={() => setHoverId(node.id)}
@@ -455,14 +459,33 @@ export function TreeCanvas({ tree }: Props) {
 
                 <button
                   type="button"
-                  className={`status-dot status-dot--${status}`}
-                  onClick={(event) => {
-                    event.stopPropagation()
-                    cycleNodeStatus(node.id)
-                  }}
+                  className={[
+                    'status-dot',
+                    `status-dot--${status}`,
+                    isDerived ? 'status-dot--auto' : '',
+                  ]
+                    .filter(Boolean)
+                    .join(' ')}
+                  onClick={
+                    isDerived
+                      ? undefined
+                      : (event) => {
+                          event.stopPropagation()
+                          cycleNodeStatus(node.id)
+                        }
+                  }
                   onDoubleClick={(event) => event.stopPropagation()}
-                  title="点击切换：未开始 → 在学 → 已掌握"
-                  aria-label={`状态：${STATUS_LABEL[status]}，点击切换`}
+                  aria-disabled={isDerived || undefined}
+                  title={
+                    isDerived
+                      ? '完成状态由子节点自动汇总：下面全部完成后自动变金'
+                      : '点击切换：未开始 → 在学 → 已掌握'
+                  }
+                  aria-label={
+                    isDerived
+                      ? `状态：${STATUS_LABEL[status]}（由子节点汇总）`
+                      : `状态：${STATUS_LABEL[status]}，点击切换`
+                  }
                 />
 
                 {isRenaming ? (
@@ -492,11 +515,19 @@ export function TreeCanvas({ tree }: Props) {
                   <i
                     className="canvas-progress"
                     data-status={status}
-                    onClick={(event) => {
-                      event.stopPropagation()
-                      cycleNodeStatus(node.id)
-                    }}
-                    title={`进度：${STATUS_LABEL[status]}（点击切换）`}
+                    onClick={
+                      isDerived
+                        ? undefined
+                        : (event) => {
+                            event.stopPropagation()
+                            cycleNodeStatus(node.id)
+                          }
+                    }
+                    title={
+                      isDerived
+                        ? `进度：${STATUS_LABEL[status]}（由子节点汇总）`
+                        : `进度：${STATUS_LABEL[status]}（点击切换）`
+                    }
                     onDoubleClick={(event) => event.stopPropagation()}
                   />
                 )}

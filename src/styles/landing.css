@@ -420,8 +420,8 @@
 }
 
 .landing-node-done {
-  border-color: rgba(47, 107, 79, 0.3);
-  color: var(--accent-ink);
+  border-color: rgba(184, 134, 11, 0.4);
+  color: #7a5600;
 }
 
 .landing-node-done::after {
@@ -601,13 +601,13 @@
 }
 
 .landing-dot-learning {
-  border-color: #c98f5f;
-  background: #e8b98f;
+  border-color: #3d7f5f;
+  background: #4d9070;
 }
 
 .landing-dot-done {
-  border-color: #4bbf85;
-  background: #4bbf85;
+  border-color: #b8860b;
+  background: #c9930f;
 }
 
 .landing-today-list span {

@@ -322,12 +322,33 @@
 }
 
 .canvas-node.is-soft .status-dot--learning {
-  border-color: #c08a2e;
+  border-color: #3d7f5f;
 }
 
 .canvas-node.is-soft .status-dot--done {
-  border-color: #3f7a3a;
-  background: #3f7a3a;
+  border-color: #b8860b;
+  background: #c9930f;
+}
+
+/* 完成态的内容层卡片整体转成浅金，避免只有一个小圆点变色、看起来没完成 */
+.canvas-node.is-soft[data-status='done'] {
+  background: #fffaf0;
+  border-color: rgba(184, 134, 11, 0.45);
+  box-shadow: 0 1px 3px rgba(122, 86, 0, 0.1);
+}
+
+.canvas-node.is-soft[data-status='done'] .canvas-title {
+  color: var(--node-ink, #7a5600);
+}
+
+/* 父节点的状态由子节点汇总，圆点不可点，光标也要说明这一点 */
+.canvas-node .status-dot--auto {
+  cursor: default;
+}
+
+.canvas-node .status-dot--auto:hover {
+  transform: none;
+  border-color: inherit;
 }
 
 /* 浅色卡片上的折叠按钮：白描边会融进卡片，改用绿色描边撑出边界 */
@@ -669,11 +690,11 @@
 }
 
 .canvas-progress[data-status="learning"] {
-  background: #e39a4b;
+  background: #4d9070;
 }
 
 .canvas-progress[data-status="done"] {
-  background: #4e9a6b;
+  background: #c9930f;
 }
 
 /* 缩得太小时点阵会变成噪点，直接关掉 */

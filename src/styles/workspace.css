@@ -660,11 +660,11 @@
 
 /* 状态色只动字芯，外描边保持米白，刻痕感不散 */
 .t3d-glyph[data-status='learning'] {
-  color: #96520e;
+  color: #2f6b4f;
 }
 
 .t3d-glyph[data-status='done'] {
-  color: #20573c;
+  color: #8a6410;
 }
 
 .t3d-glyph[data-status='todo'] {
@@ -797,18 +797,18 @@
 }
 
 .legend-dot--todo {
-  border-color: #dcc86e;
-  background: #ecd98c;
+  border-color: #b7c9bd;
+  background: #ffffff;
 }
 
 .legend-dot--learning {
-  border-color: #d0803a;
-  background: #e8964a;
+  border-color: #3d7f5f;
+  background: #4d9070;
 }
 
 .legend-dot--done {
-  border-color: #26573f;
-  background: #2f6b4f;
+  border-color: #b8860b;
+  background: #c9930f;
 }
 
 /* ---------- 3D 标签层：贴枝文字 ---------- */
@@ -982,11 +982,11 @@
 }
 
 .t3d-label[data-status='learning'] .t3d-label-dot {
-  background: #d08a2c;
+  background: #4d9070;
 }
 
 .t3d-label[data-status='done'] .t3d-label-dot {
-  background: #3f7a3a;
+  background: #c9930f;
 }
 
 

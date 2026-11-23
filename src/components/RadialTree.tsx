@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import type { PointerEvent as ReactPointerEvent } from 'react'
 import { useTreeStore } from '../store/useTreeStore'
 import { displayStatus } from '../lib/status'
+import { DONE_COLORS } from '../lib/colors'
 import { layoutRadial } from '../lib/radialTree'
 import type { NodeStatus, Tree } from '../types/tree'
 
@@ -14,9 +15,9 @@ import type { NodeStatus, Tree } from '../types/tree'
  */
 
 const STATUS_STROKE: Record<NodeStatus, string> = {
-  todo: '#c9c1ad',
-  learning: '#d08a2c',
-  done: '#3f7a3a',
+  todo: '#8fa896',
+  learning: '#4d9070',
+  done: DONE_COLORS.border,
 }
 
 const MIN_ZOOM = 0.45
@@ -302,7 +303,13 @@ export function RadialTree({ tree }: Props) {
                   cx={node.x}
                   cy={node.y}
                   r={node.dot}
-                  fill={status === 'done' ? node.color : node.depth === 0 ? node.color : '#ffffff'}
+                  fill={
+                    status === 'done'
+                      ? DONE_COLORS.core
+                      : node.depth === 0
+                        ? node.color
+                        : '#ffffff'
+                  }
                   fillOpacity={status === 'done' || node.depth === 0 ? 0.9 : 1}
                   stroke={STATUS_STROKE[status]}
                   strokeWidth={(node.depth === 0 ? 3 : status === 'todo' ? 1.7 : 2.4) / zoom}

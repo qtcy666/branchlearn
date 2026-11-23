@@ -18,7 +18,7 @@ import {
   updateNode,
 } from '../lib/treeOps'
 import { buildTreeFromTemplate, type Template } from '../data/templates'
-import { aggregateStatus, displayStatus } from '../lib/status'
+import { displayStatus } from '../lib/status'
 
 export type SaveState = 'idle' | 'saving' | 'saved' | 'error'
 
@@ -220,16 +220,15 @@ export const useTreeStore = create<TreeStore>((set, get) => {
       if (!tree) return
       const node = findNode(tree.root, nodeId)
       if (!node) return
-
-      // 父节点手动设成和聚合结果不同的值时，标记为手动覆盖
-      const manual = node.children.length > 0 && status !== aggregateStatus(node)
+      // 有子节点的节点状态由子节点汇总决定，不能手动标完成
+      if (node.children.length > 0) return
 
       commit((current) => ({
         ...current,
         root: updateNode(current.root, nodeId, (target) => ({
           ...target,
           status,
-          statusManual: manual,
+          statusManual: false,
           updatedAt: Date.now(),
         })),
       }))
@@ -241,19 +240,19 @@ export const useTreeStore = create<TreeStore>((set, get) => {
       if (!tree) return
       const node = findNode(tree.root, nodeId)
       if (!node) return
+      // 同上：父节点的完成状态只能等子节点全部完成
+      if (node.children.length > 0) return
 
       const currentStatus = displayStatus(node)
       const next: NodeStatus =
         currentStatus === 'todo' ? 'learning' : currentStatus === 'learning' ? 'done' : 'todo'
-      // 如果点到的值恰好等于子节点聚合出来的结果，就取消手动覆盖，重新交给聚合
-      const manual = node.children.length > 0 && next !== aggregateStatus(node)
 
       commit((current) => ({
         ...current,
         root: updateNode(current.root, nodeId, (target) => ({
           ...target,
           status: next,
-          statusManual: manual,
+          statusManual: false,
           updatedAt: Date.now(),
         })),
       }))

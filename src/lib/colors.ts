@@ -20,6 +20,25 @@ export const LEVEL_COLORS = [
 /** 结构层（实色）的最大深度；超过这个深度一律用浅色卡片。 */
 export const SOLID_MAX_DEPTH = 1
 
+/**
+ * 完成态的黄金色组。
+ *
+ * 语义约定：绿色 = 还没完成（含"在学"），金色 = 已完成。
+ * 所以金色不参与层级配色，只在节点状态变成 done 时整体替换掉层级绿。
+ */
+export const DONE_COLORS = {
+  /** 实心节点渐变深端 */
+  core: '#c9930f',
+  /** 实心节点渐变浅端 */
+  light: '#e8c25a',
+  /** 描边 / 边框 */
+  border: '#b8860b',
+  /** 浅色卡片上的标题文字 */
+  ink: '#7a5600',
+  /** 状态点、进度点填充 */
+  dot: '#c9930f',
+} as const
+
 /** 按深度取这一层的绿色（超过数组长度循环到最后一档）。 */
 export function levelColor(depth: number): string {
   return LEVEL_COLORS[Math.min(depth, LEVEL_COLORS.length - 1)]

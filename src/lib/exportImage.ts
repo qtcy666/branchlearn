@@ -54,7 +54,7 @@ function drawStatus(ctx: CanvasRenderingContext2D, x: number, y: number, status:
   ctx.arc(x, y, 5, 0, Math.PI * 2)
 
   if (status === 'done') {
-    ctx.fillStyle = '#2f6b4f'
+    ctx.fillStyle = '#c9930f'
     ctx.fill()
     ctx.beginPath()
     ctx.moveTo(x - 2.4, y)
@@ -69,12 +69,12 @@ function drawStatus(ctx: CanvasRenderingContext2D, x: number, y: number, status:
   }
 
   if (status === 'learning') {
-    ctx.fillStyle = '#d9a441'
+    ctx.fillStyle = '#4d9070'
     ctx.fill()
     return
   }
 
-  ctx.strokeStyle = '#c9c3b6'
+  ctx.strokeStyle = '#8fa896'
   ctx.lineWidth = 1.4
   ctx.stroke()
 }
