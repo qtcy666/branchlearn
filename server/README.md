@@ -75,3 +75,41 @@ VITE_FILL_API=http://localhost:8788
 `FILL_API_KEY` 配到平台的环境变量里，不要写进代码。
 
 部署后把前端构建变量 `VITE_FILL_API` 指向函数地址，重新构建。
+
+## 阶段 2：SSE 生成接口
+
+`POST /generate` 返回 `text/event-stream`，供前端「AI 生成」新链路使用。
+
+请求体：
+
+```json
+{ "topic": "线性代数", "goal": "期末复习" }
+```
+
+事件：
+
+| event | data | 说明 |
+|---|---|---|
+| `progress` | `{done,total}` | 开始时的 0/total |
+| `node` | `{done,total,node}` | 逐节点推进，前端映射成进度 |
+| `done` | `{tree,cached}` | 完整契约树（`version/root`） |
+| `error` | `{code,message,errors}` | 已开始 SSE 后的失败 |
+
+新增环境变量（不填则复用对应的 `FILL_*`）：
+
+| 变量 | 默认值 | 说明 |
+|---|---|---|
+| `AI_API_KEY` | 空 | 必填（mock 除外） |
+| `AI_BASE_URL` | `https://api.deepseek.com` | 模型接口 |
+| `AI_MODEL` | `deepseek-chat` | 需要支持 JSON mode |
+| `AI_MOCK` | 空 | 设为 `1` 返回固定契约树 |
+
+行为：结构校验失败会把错误路径回喂模型，最多重试 2 次；成功结果按主题缓存 10 分钟；每 IP 每分钟 5 次。
+
+前端在 `branchlearn/.env.local` 里配置：
+
+```
+VITE_AI_API=http://localhost:8788
+```
+
+不配置时前端自动回落到 `mockGenerate`，页面行为与阶段 1 一致。

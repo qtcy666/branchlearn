@@ -13,6 +13,7 @@
 
 const http = require("http");
 const { fillTree, cfg } = require("./fill");
+const gen = require("./generate");
 
 const PORT = Number(process.env.FILL_PORT || 8788);
 const ORIGIN = process.env.FILL_ORIGIN || "*";
@@ -100,12 +101,94 @@ const server = http.createServer(async (req, res) => {
 
   if (req.method === "GET" && url === "/health") {
     const c = cfg();
-    send(res, 200, { ok: true, model: c.model, mock: c.mock });
+    const g = gen.cfg();
+    send(res, 200, {
+      ok: true,
+      model: c.model,
+      mock: c.mock,
+      aiModel: g.model,
+      aiMock: g.mock,
+      keySet: Boolean(g.key),
+    });
+    return;
+  }
+
+  // ---------- 阶段 2：SSE 生成 ----------
+  if (req.method === "POST" && url === "/generate") {
+    if (rateLimited(clientIp(req))) {
+      send(res, 429, { error: "rate_limited", message: "用得太频繁了，等一分钟再试" });
+      return;
+    }
+
+    let body;
+    try {
+      body = await readBody(req);
+    } catch (e) {
+      send(res, e.status || 400, { error: "bad_request", message: e.message });
+      return;
+    }
+
+    const topic = typeof body.topic === "string" ? body.topic.trim() : "";
+    const goal = typeof body.goal === "string" ? body.goal.trim().slice(0, 40) : "";
+    if (!topic || topic.length > 40) {
+      send(res, 400, { error: "invalid_topic", message: "课程名要 1–40 个字" });
+      return;
+    }
+
+    res.writeHead(200, {
+      ...corsHeaders(),
+      "Content-Type": "text/event-stream; charset=utf-8",
+      "Cache-Control": "no-cache, no-transform",
+      Connection: "keep-alive",
+      "X-Accel-Buffering": "no",
+    });
+    res.write(": connected\n\n");
+
+    let closed = false;
+    const ping = setInterval(() => {
+      if (!res.writableEnded) res.write(": ping\n\n");
+    }, 10000);
+    res.on("close", () => {
+      closed = true;
+      clearInterval(ping);
+    });
+
+    try {
+      const { tree, cached } = await gen.generateTree(topic, goal);
+      if (closed) return;
+
+      const nodes = gen.flattenNodes(tree.root);
+      res.write(`event: progress\ndata: ${JSON.stringify({ done: 0, total: nodes.length })}\n\n`);
+
+      for (let i = 0; i < nodes.length; i += 1) {
+        if (closed) return;
+        res.write(
+          `event: node\ndata: ${JSON.stringify({ done: i + 1, total: nodes.length, node: nodes[i] })}\n\n`,
+        );
+        await new Promise((resolve) => setTimeout(resolve, 12));
+      }
+
+      res.write(`event: done\ndata: ${JSON.stringify({ tree, cached })}\n\n`);
+      res.end();
+    } catch (e) {
+      if (!closed) {
+        res.write(
+          `event: error\ndata: ${JSON.stringify({
+            code: e.status || 502,
+            message: e.message || "生成失败",
+            errors: Array.isArray(e.errors) ? e.errors : [],
+          })}\n\n`,
+        );
+        res.end();
+      }
+    } finally {
+      clearInterval(ping);
+    }
     return;
   }
 
   if (req.method !== "POST" || url !== "/fill") {
-    send(res, 404, { error: "not_found", message: "只支持 POST /fill 与 GET /health" });
+    send(res, 404, { error: "not_found", message: "只支持 POST /generate、POST /fill 与 GET /health" });
     return;
   }
 

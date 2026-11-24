@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import type { Tree } from '../types/tree'
 import { useTreeStore } from '../store/useTreeStore'
 import { mockGenerate, schemaToTree } from '../lib/aiGenerate'
+import { AI_ENABLED, generateTree } from '../lib/aiClient'
 import { diffTrees, flattenDiff, type DiffKind, type TreeDiff } from '../lib/treeDiff'
 import type { SchemaTree } from '../lib/treeSchema'
 
@@ -82,7 +83,11 @@ export function AIGenerateDialog({ onClose, tree = null, onApplied }: Props) {
     setTotal(0)
 
     try {
-      for await (const event of mockGenerate(text, ac.signal)) {
+      const stream = AI_ENABLED
+        ? generateTree(text, '', ac.signal)
+        : mockGenerate(text, ac.signal)
+
+      for await (const event of stream) {
         if (ac.signal.aborted) return
         if (event.type === 'progress') {
           setDone(event.done)
@@ -95,7 +100,7 @@ export function AIGenerateDialog({ onClose, tree = null, onApplied }: Props) {
       }
     } catch (err) {
       if ((err as Error).name === 'AbortError') return
-      setError('生成失败，请重试。')
+      setError((err as Error).message || '生成失败，请重试。')
       setStage('error')
     }
   }
@@ -177,10 +182,14 @@ export function AIGenerateDialog({ onClose, tree = null, onApplied }: Props) {
             <div className="ai-gen-bar" aria-hidden="true">
               <i style={{ width: `${percent}%` }} />
             </div>
-            <p className="ai-fill-note">这是本地 mock，不会联网，也不会产生费用。</p>
+            <p className="ai-fill-note">
+              {AI_ENABLED
+                ? '模型生成通常需要 10–30 秒，可以点「停止」取消。'
+                : '这是本地 mock，不会联网，也不会产生费用。'}
+            </p>
             <div className="dialog-actions">
               <button type="button" className="btn btn-ghost" onClick={cancel}>
-                取消
+                停止
               </button>
             </div>
           </>
