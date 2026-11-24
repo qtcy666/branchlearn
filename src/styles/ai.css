@@ -130,3 +130,135 @@
     width: 94vw;
   }
 }
+
+/* ---------- 阶段 1：AI 生成预览 ---------- */
+
+.ai-gen {
+  width: min(560px, 92vw);
+}
+
+.ai-gen-progress {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+  margin: 26px 0 0;
+  font-size: 14px;
+  color: var(--ink-2);
+}
+
+.ai-gen-bar {
+  height: 4px;
+  margin-top: 10px;
+  border-radius: 999px;
+  background: var(--line);
+  overflow: hidden;
+}
+
+.ai-gen-bar i {
+  display: block;
+  height: 100%;
+  background: var(--accent);
+  transition: width 120ms linear;
+}
+
+.ai-gen-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 18px 0 10px;
+  font-size: 12px;
+}
+
+.ai-gen-stat {
+  padding: 3px 9px;
+  border-radius: 999px;
+}
+
+.ai-gen-stat--added {
+  color: #2f6b4f;
+  background: rgba(63, 122, 58, 0.1);
+}
+
+.ai-gen-stat--changed {
+  color: #8a5a12;
+  background: rgba(197, 138, 46, 0.14);
+}
+
+.ai-gen-stat--removed {
+  color: #8f2f28;
+  background: rgba(179, 69, 60, 0.1);
+}
+
+.ai-gen-diff {
+  max-height: 300px;
+  overflow: auto;
+  padding: 6px 0;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+
+.ai-gen-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 10px 4px 8px;
+  border-left: 3px solid transparent;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.ai-gen-row--added {
+  border-left-color: #3f7a3a;
+  background: rgba(63, 122, 58, 0.07);
+}
+
+.ai-gen-row--changed {
+  border-left-color: #c58a2e;
+  background: rgba(197, 138, 46, 0.09);
+}
+
+.ai-gen-row--removed {
+  border-left-color: #b3453c;
+  background: rgba(179, 69, 60, 0.07);
+}
+
+.ai-gen-row--removed .ai-gen-title {
+  color: var(--muted);
+  text-decoration: line-through;
+}
+
+.ai-gen-mark {
+  width: 12px;
+  flex: none;
+  text-align: center;
+  font-weight: 700;
+}
+
+.ai-gen-title {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ai-gen-kind {
+  margin-left: auto;
+  flex: none;
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.ai-gen-done {
+  margin: 20px 0 0;
+  font-size: 14px;
+  line-height: 1.7;
+  color: var(--ink-2);
+}
+
+@media (max-width: 520px) {
+  .ai-gen {
+    width: 94vw;
+  }
+}

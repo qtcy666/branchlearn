@@ -6,7 +6,7 @@ import type { Template } from '../data/templates'
 import { EmptyState } from './EmptyState'
 import { ConfirmDialog } from './ConfirmDialog'
 import { ImportDialog } from './ImportDialog'
-import { AIFillDialog } from './AIFillDialog'
+import { AIGenerateDialog } from './AIGenerateDialog'
 
 interface Props {
   trees: Tree[]
@@ -73,7 +73,7 @@ export function HomeView({ trees, onOpen, onNew, onUseTemplate, onHome }: Props)
           onUseTemplate={onUseTemplate}
           onAIGenerate={() => setAiOpen(true)}
         />
-        {aiOpen && <AIFillDialog onClose={() => setAiOpen(false)} />}
+        {aiOpen && <AIGenerateDialog onClose={() => setAiOpen(false)} onApplied={onOpen} />}
         {undoToast}
       </>
     )
@@ -268,7 +268,7 @@ export function HomeView({ trees, onOpen, onNew, onUseTemplate, onHome }: Props)
       {undoToast}
 
       {importOpen && <ImportDialog onClose={() => setImportOpen(false)} />}
-      {aiOpen && <AIFillDialog onClose={() => setAiOpen(false)} />}
+      {aiOpen && <AIGenerateDialog onClose={() => setAiOpen(false)} onApplied={onOpen} />}
     </section>
   )
 }

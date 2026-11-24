@@ -16,6 +16,8 @@ export default function App() {
   const createTreeFromTemplate = useTreeStore((s) => s.createTreeFromTemplate)
   const importTrees = useTreeStore((s) => s.importTrees)
   const notify = useTreeStore((s) => s.notify)
+  const generatedUndoable = useTreeStore((s) => s.generatedUndoable)
+  const undoGenerated = useTreeStore((s) => s.undoGenerated)
 
   const [route, setRoute] = useState<Route>(() => parseRoute())
   const [dialogOpen, setDialogOpen] = useState(false)
@@ -26,6 +28,23 @@ export default function App() {
     setEntered(true)
     goHome()
   }
+
+  // AI 应用后的一步撤销：Ctrl/⌘+Z。输入框内不拦截，保留文本撤销。
+  useEffect(() => {
+    if (!generatedUndoable) return
+    const onKey = (event: KeyboardEvent) => {
+      if (!(event.metaKey || event.ctrlKey) || event.shiftKey) return
+      if (event.key.toLowerCase() !== 'z') return
+      const target = event.target as HTMLElement | null
+      const tag = target?.tagName
+      if (tag === 'INPUT' || tag === 'TEXTAREA' || target?.isContentEditable) return
+      event.preventDefault()
+      undoGenerated()
+      notify('已撤销 AI 生成。')
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [generatedUndoable, undoGenerated, notify])
 
   useEffect(() => {
     const onHashChange = () => setRoute(parseRoute())

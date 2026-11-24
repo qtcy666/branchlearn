@@ -41,6 +41,8 @@ export interface TreeNode {
   collapsed: boolean
   /** 子节点。叶子节点是空数组，不用 null，避免到处都是可选链。 */
   children: TreeNode[]
+  /** AI 生成的节点会带这个标记，手写节点没有该字段。 */
+  source?: 'ai'
   createdAt: number
   updatedAt: number
 }

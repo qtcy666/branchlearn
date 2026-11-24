@@ -52,11 +52,23 @@ interface TreeStore {
   renameLevel: (depth: number, name: string) => void
   deleteTree: (treeId: string) => void
   restoreTrees: (trees: Tree[]) => void
+  /** 阶段 1：应用 AI 生成的树；targetId 为 null 表示新建一棵。 */
+  applyGenerated: (generated: Tree, targetId: string | null) => string
+  /** 撤销最近一次 AI 应用（只保留一步，刷新后失效）。 */
+  undoGenerated: () => void
+  generatedUndoable: boolean
 }
 
 const initial = loadDocument()
 
 let saveTimer: ReturnType<typeof setTimeout> | null = null
+
+/** 最近一次 AI 应用前的快照，只保留一步；不写盘，刷新即失效。 */
+let lastGeneratedApply: {
+  treeId: string
+  before: Tree | null
+  beforeActiveId: string | null
+} | null = null
 
 /** 防抖写盘：连续操作时只在停下来 350ms 后写一次。 */
 function scheduleSave(get: () => TreeStore, set: (partial: Partial<TreeStore>) => void) {
@@ -106,6 +118,7 @@ export const useTreeStore = create<TreeStore>((set, get) => {
     activeTreeId: initial.document.activeTreeId,
     saveState: 'idle',
     notice: initial.recovered ? (initial.message ?? null) : null,
+    generatedUndoable: false,
 
     createTree: (title, description = '') => appendTree(createTree(title, description)),
 
@@ -338,6 +351,55 @@ export const useTreeStore = create<TreeStore>((set, get) => {
       })
       scheduleSave(get, set)
     },
+
+    applyGenerated: (generated, targetId) => {
+      const state = get()
+
+      if (!targetId) {
+        const beforeActiveId = state.activeTreeId
+        appendTree(generated)
+        lastGeneratedApply = { treeId: generated.id, before: null, beforeActiveId }
+        set({ generatedUndoable: true })
+        return generated.id
+      }
+
+      const current = state.document.trees.find((tree) => tree.id === targetId)
+      if (!current) return ''
+
+      const merged: Tree = {
+        ...current,
+        title: generated.title,
+        root: generated.root,
+        updatedAt: Date.now(),
+      }
+      lastGeneratedApply = { treeId: targetId, before: current, beforeActiveId: state.activeTreeId }
+      commit(() => merged)
+      set({ generatedUndoable: true })
+      return targetId
+    },
+
+    undoGenerated: () => {
+      if (!lastGeneratedApply) return
+      const { treeId, before, beforeActiveId } = lastGeneratedApply
+      const state = get()
+      lastGeneratedApply = null
+
+      if (before && !state.document.trees.some((tree) => tree.id === treeId)) {
+        set({ generatedUndoable: false })
+        return
+      }
+
+      const trees = before
+        ? state.document.trees.map((tree) => (tree.id === treeId ? before : tree))
+        : state.document.trees.filter((tree) => tree.id !== treeId)
+
+      set({
+        document: { ...state.document, trees, updatedAt: Date.now() },
+        activeTreeId: beforeActiveId,
+        generatedUndoable: false,
+      })
+      scheduleSave(get, set)
+    },
   }
 })
 
@@ -352,5 +414,7 @@ export function resetStoreForTest() {
     activeTreeId: null,
     saveState: 'idle',
     notice: null,
+    generatedUndoable: false,
   })
+  lastGeneratedApply = null
 }

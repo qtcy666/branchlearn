@@ -16,6 +16,7 @@ import { EditableTitle } from './EditableTitle'
 import { ConfirmDialog } from './ConfirmDialog'
 import { NoticeBar } from './NoticeBar'
 import { FeedbackWidget } from './FeedbackWidget'
+import { AIGenerateDialog } from './AIGenerateDialog'
 
 interface Props {
   tree: Tree
@@ -55,6 +56,7 @@ export function TreeWorkspace({ tree, onBack }: Props) {
   const [menuOpen, setMenuOpen] = useState(false)
   const [confirmDelete, setConfirmDelete] = useState(false)
   const [todayOpen, setTodayOpen] = useState(false)
+  const [aiOpen, setAiOpen] = useState(false)
   const [view, setView] = useState<ViewMode>('canvas')
 
   const menuRef = useRef<HTMLDivElement>(null)
@@ -228,6 +230,17 @@ export function TreeWorkspace({ tree, onBack }: Props) {
                 </button>
                 <button
                   type="button"
+                  className="menu-item"
+                  role="menuitem"
+                  onClick={() => {
+                    setAiOpen(true)
+                    setMenuOpen(false)
+                  }}
+                >
+                  用 AI 重新生成
+                </button>
+                <button
+                  type="button"
                   className="menu-item menu-item--danger"
                   role="menuitem"
                   onClick={() => {
@@ -290,6 +303,8 @@ export function TreeWorkspace({ tree, onBack }: Props) {
           </aside>
         </div>
       )}
+
+      {aiOpen && <AIGenerateDialog tree={tree} onClose={() => setAiOpen(false)} />}
 
       {confirmDelete && (
         <ConfirmDialog
